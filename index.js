@@ -4,6 +4,7 @@
   var cols = 8;
   var rows = 5;
   var delay = 20;
+  var speed = 500;
 
   function preloadImage(imgSrc, done) {
     var image = new Image();
@@ -21,6 +22,7 @@
 
     var tile = document.createElement('div');
     tile.classList.add('tile');
+    tile.style.position = 'absolute';
     tile.style['background-image'] = imgSrc;
     tile.style.left = x + 'px';
     tile.style.top = y + 'px';
@@ -32,20 +34,17 @@
 
   function makeTransitionTile(i, element, imgOut, imgIn, done) {
     var tileOut = makeTile(i, element, imgOut);
+    var tileIn = makeTile(i, element, imgIn);
     element.appendChild(tileOut);
-    tileOut.addEventListener('animationend', function () {
-      var tileIn = makeTile(i, element, imgIn);
-      element.appendChild(tileIn);
+    tileIn.addEventListener('animationend', function () {
       element.removeChild(tileOut);
-
-      tileIn.classList.add('in');
-      tileIn.addEventListener('animationend', function () {
-        done(tileIn);
-      });
+      done(tileIn);
     });
 
     setTimeout(function () {
-      tileOut.classList.add('out');
+      tileOut.style.animation = 'tile-out ' + speed + 'ms';
+      tileIn.style.animation = 'tile-in ' + speed + 'ms';
+      element.appendChild(tileIn);
     }, i * delay);
   }
 
