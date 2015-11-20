@@ -1,0 +1,21 @@
+{
+  "log": "dev",
+  "routes": [{
+    "path": "/",
+    "type": "static",
+    "root": "example/",
+    "watch": "true"
+  },{
+    "path": "/src",
+    "type": "static",
+    "root": "src/"
+  },{
+    "path": "/src.js",
+    "type": "concat",
+    "files": ["src/**/*.js"]
+  },{
+    "path": "/src.css",
+    "type": "less",
+    "files": ["src/**/*.less"]
+  }]
+}

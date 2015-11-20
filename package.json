@@ -1,0 +1,30 @@
+{
+  "name": "image-transition",
+  "version": "1.0.0",
+  "author": "Jonathan Diehl",
+  "description": "Image Transitions",
+  "scripts": {
+    "test": "gulp test",
+    "start": "webdev",
+    "make": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jdiehl/image-transition.git"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "run-sequence": "*",
+    "gulp-rename": "*",
+    "del": "*",
+    "gulp-eslint": "*",
+    "gulp-less-import": "*",
+    "gulp-less": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-minify-css": "*",
+    "gulp-concat": "*",
+    "gulp-uglify": "*",
+    "gulp-strip-debug": "*"
+  },
+  "license": "MIT"
+}
