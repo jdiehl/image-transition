@@ -101,7 +101,7 @@ window.ImageTransition = (function () {
 
   return {
     transition: transition,
-    mosaic: make({ tileSize: 10, duration: 500, transition: 'rotatey' })
+    mosaic: make({ tiles: 10, duration: 500, transition: 'rotatey' })
   };
 
 }(window));

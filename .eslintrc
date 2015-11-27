@@ -23,7 +23,7 @@ rules:
   block-scoped-var: 2
   complexity:
     - 2
-    - 5
+    - 10
   eqeqeq: 2
   curly:
     - 2

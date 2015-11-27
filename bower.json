@@ -1,0 +1,30 @@
+{
+  "name": "image-transition",
+  "description": "Image transition library",
+  "main": [
+    "image-transition.min.js",
+    "image-transition.min.css"
+  ],
+  "authors": [
+    "Jonathan Diehl"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "image",
+    "transition",
+    "effect"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "webdev.json",
+    "examples",
+    "src"
+  ]
+}

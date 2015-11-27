@@ -27,7 +27,7 @@ var stripDebug = require('gulp-strip-debug');
 
 // lint
 gulp.task('lint', function () {
-  return gulp.src(['*.js', 'src/**/*.js'])
+  return gulp.src(['gulpfile.js', 'src/**/*.js'])
   .pipe(eslint())
   .pipe(eslint.format())
   .pipe(eslint.failAfterError());
@@ -45,7 +45,7 @@ gulp.task('less', function () {
   .pipe(less())
   .pipe(autoprefixer())
   .pipe(gulp.dest('.'))
-  .pipe(rename('image-transition.min.less'))
+  .pipe(rename('image-transition.min.css'))
   .pipe(cssmin({ keepSpecialComments: 0 }))
   .pipe(gulp.dest('.'));
 });
