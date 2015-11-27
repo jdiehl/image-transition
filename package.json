@@ -13,18 +13,21 @@
     "url": "https://github.com/jdiehl/image-transition.git"
   },
   "devDependencies": {
-    "gulp": "*",
-    "run-sequence": "*",
-    "gulp-rename": "*",
     "del": "*",
-    "gulp-eslint": "*",
-    "gulp-less-import": "*",
-    "gulp-less": "*",
+    "gulp": "*",
     "gulp-autoprefixer": "*",
-    "gulp-minify-css": "*",
+    "gulp-browserify": "^0.5.1",
     "gulp-concat": "*",
+    "gulp-eslint": "*",
+    "gulp-less": "*",
+    "gulp-less-import": "*",
+    "gulp-minify-css": "*",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "*",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-strip-debug": "*",
     "gulp-uglify": "*",
-    "gulp-strip-debug": "*"
+    "run-sequence": "*"
   },
   "license": "MIT"
 }

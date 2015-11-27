@@ -3,8 +3,10 @@
 'use strict';
 
 var gulp = require('gulp');
+var plumber = require('gulp-plumber');
 var runSequence = require('run-sequence');
 var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
 
 // clean
 var del = require('del');
@@ -19,7 +21,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var cssmin = require('gulp-minify-css');
 
 // javascript
-var concat = require('gulp-concat');
+var browserify = require('gulp-browserify');
 var uglify = require('gulp-uglify');
 var stripDebug = require('gulp-strip-debug');
 
@@ -41,9 +43,12 @@ gulp.task('clean', function (done) {
 // less
 gulp.task('less', function () {
   return gulp.src(['src/**/*.less'])
+  .pipe(plumber())
   .pipe(lessImport('image-transition.less'))
+  .pipe(sourcemaps.init())
   .pipe(less())
   .pipe(autoprefixer())
+  .pipe(sourcemaps.write())
   .pipe(gulp.dest('.'))
   .pipe(rename('image-transition.min.css'))
   .pipe(cssmin({ keepSpecialComments: 0 }))
@@ -52,13 +57,19 @@ gulp.task('less', function () {
 
 // javascript
 gulp.task('js', function () {
-  return gulp.src(['src/**/*.js'])
-  .pipe(concat('image-transition.js'))
+  return gulp.src(['src/image-transition.js'])
+  .pipe(plumber())
+  .pipe(browserify({ debug: true }))
   .pipe(gulp.dest('.'))
   .pipe(rename('image-transition.min.js'))
   .pipe(stripDebug())
   .pipe(uglify())
   .pipe(gulp.dest('.'));
+});
+
+gulp.task('watch', ['default'], function () {
+  gulp.watch('src/**/*.less', ['less']);
+  gulp.watch('src/**/*.js', ['js']);
 });
 
 gulp.task('test', ['lint']);

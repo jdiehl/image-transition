@@ -69,7 +69,9 @@ rules:
   yoda: 2
 
   # strict mode
-  strict: 2
+  strict:
+  - 2
+  - global
 
   # vairables
   no-shadow-restricted-names: 2
@@ -79,6 +81,7 @@ rules:
 # environment
 env:
   browser: true
+  node: true
 
 # predefined globals
 globals:
