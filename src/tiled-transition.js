@@ -2,52 +2,92 @@
 
 var util = require('./util');
 
-function makeTile(x, y, w, h, imgSrc) {
+function prepareOptions(element, options) {
+
+  // determine the number of tiles to create
+  if (options.tileSize) {
+    options.tiles = Math.round(Math.max(element.offsetWidth, element.offsetHeight) / options.tileSize);
+  }
+  if (options.tiles) {
+    if (element.offsetWidth > element.offsetHeight) {
+      options.cols = options.tiles;
+      options.rows = Math.round(options.tiles / element.offsetWidth * element.offsetHeight);
+    } else {
+      options.cols = Math.round(options.tiles / element.offsetHeight * element.offsetWidth);
+      options.rows = options.tiles;
+    }
+  }
+  options.cols = options.cols || 1;
+  options.rows = options.rows || 1;
+
+  // determine how long tiles should transition
+  options.duration = options.duration || 1000;
+  options.delay = options.delay || function (x, y) { return (x + y) * 50; };
+}
+
+function styleToPoint(style) {
+  return style.split(' ').map(function (v) {
+    if (v.indexOf('px') >= 0) return parseInt(v);
+    return parseInt(v) / 100;
+  });
+}
+
+function pointToStyle(point, unit) {
+  unit = unit || 'px';
+  var d = unit === '%' ? 100 : 1;
+  return point.map(function (v) { return v * d + unit; }).join(' ');
+}
+
+function computeImageTransform(image, element, style) {
+  var w = element.offsetWidth;
+  var h = element.offsetHeight;
+  var t = { x: 0, y: 0, w: w, h: h };
+  if (style['background-size'] === 'cover') {
+    var iw = image.naturalWidth;
+    var ih = image.naturalHeight;
+    if (t.w / iw > t.h / ih) {
+      t.h = t.w / iw * ih;
+    } else {
+      t.w = t.h / ih * iw;
+    }
+  }
+  if (style['background-position']) {
+    var d = styleToPoint(style['background-position']);
+    if (style['background-position'].indexOf('%') >= 0) {
+      t.x = -(t.w - w) * d[0];
+      t.y = -(t.h - h) * d[1];
+    } else {
+      t.x = d[0];
+      t.y = d[1];
+    }
+  }
+  return t;
+}
+
+function makeTile(x, y, w, h, t, imgUrl) {
   var tile = document.createElement('div');
   tile.classList.add('tile');
   tile.style.position = 'absolute';
-  tile.style['background-image'] = imgSrc;
+  tile.style['background-image'] = imgUrl;
   tile.style.left = x * w + 'px';
   tile.style.top = y * h + 'px';
   tile.style.width = w + 'px';
   tile.style.height = h + 'px';
-  tile.style['background-position'] = -x * w + 'px ' + -y * h + 'px';
+  tile.style['background-size'] = pointToStyle([t.w, t.h]);
+  tile.style['background-position'] = pointToStyle([Math.round(t.x - x * w), Math.round(t.y - y * h)]);
   return tile;
 }
 
 // image transition
 module.exports = function (element, fromImage, toImage, options, done) {
 
-  function prepareOptions() {
-    var elementStyle = window.getComputedStyle(element);
+  prepareOptions(element, options);
 
-    // determine the number of tiles to create
-    if (options.tileSize) {
-      options.tiles = Math.round(Math.max(element.offsetWidth, element.offsetHeight) / options.tileSize);
-    }
-    if (options.tiles) {
-      if (element.offsetWidth > element.offsetHeight) {
-        options.cols = options.tiles;
-        options.rows = Math.round(options.tiles / element.offsetWidth * element.offsetHeight);
-      } else {
-        options.cols = Math.round(options.tiles / element.offsetHeight * element.offsetWidth);
-        options.rows = options.tiles;
-      }
-    }
-    options.cols = options.cols || 1;
-    options.rows = options.rows || 1;
-
-    // determine how long tiles should transition
-    options.duration = options.duration || 1000;
-    options.delay = options.delay || function (x, y) { return (x + y) * 50; };
-
-    // determine the image origin and size
-    if (elementStyle.backgroundSize === 'cover') {
-      // nothing
-    }
-  }
-
-  prepareOptions();
+  var elementStyle = window.getComputedStyle(element);
+  var fromImageTransform = computeImageTransform(fromImage, element, elementStyle);
+  var toImageTransform = computeImageTransform(toImage, element, elementStyle);
+  var fromImageUrl = util.urlFromimage(fromImage);
+  var toImageUrl = util.urlFromimage(toImage);
 
   var tiles = [];
   var tilesCount = options.cols * options.rows;
@@ -65,8 +105,8 @@ module.exports = function (element, fromImage, toImage, options, done) {
     var h = Math.round(element.offsetHeight / options.rows);
     var x = i % options.cols;
     var y = Math.floor(i / options.cols);
-    var fromTile = makeTile(x, y, w, h, util.urlFromimage(fromImage));
-    var toTile = makeTile(x, y, w, h, util.urlFromimage(toImage));
+    var fromTile = makeTile(x, y, w, h, fromImageTransform, fromImageUrl);
+    var toTile = makeTile(x, y, w, h, toImageTransform, toImageUrl);
 
     util.prepend(element, fromTile);
 
