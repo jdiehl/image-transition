@@ -36,8 +36,8 @@ gulp.task('lint', function () {
 });
 
 // clean
-gulp.task('clean', function (done) {
-  del(['image-transition.js', 'image-transition.css', 'image-transition.min.js', 'image-transition.min.css'], done);
+gulp.task('clean', function () {
+  return del(['image-transition.js', 'image-transition.css', 'image-transition.min.js', 'image-transition.min.css']);
 });
 
 // less
