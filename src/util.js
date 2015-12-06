@@ -18,7 +18,9 @@ exports.getImageSrcFromElement = function (element) {
   var style = window.getComputedStyle(element);
   var styleSrc = style['background-image'];
   if (!styleSrc) return;
-  return styleSrc.substr(0, styleSrc.length - 1).substr(4);
+  styleSrc = styleSrc.substr(0, styleSrc.length - 1).substr(4);
+  if (styleSrc[0] === '"') styleSrc.substr(0, styleSrc.length - 1).substr(1);
+  return styleSrc;
 };
 
 exports.urlFromimage = function (image) {
