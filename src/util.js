@@ -19,7 +19,7 @@ exports.getImageSrcFromElement = function (element) {
   var styleSrc = style['background-image'];
   if (!styleSrc) return;
   styleSrc = styleSrc.substr(0, styleSrc.length - 1).substr(4);
-  if (styleSrc[0] === '"') styleSrc.substr(0, styleSrc.length - 1).substr(1);
+  if (styleSrc[0] === '"') styleSrc = styleSrc.substr(0, styleSrc.length - 1).substr(1);
   return styleSrc;
 };
 
