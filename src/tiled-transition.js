@@ -108,13 +108,18 @@ module.exports = function (element, fromImage, toImage, options, done) {
     var fromTile = makeTile(x, y, w, h, fromImageTransform, fromImageUrl);
     var toTile = makeTile(x, y, w, h, toImageTransform, toImageUrl);
 
-    util.prepend(element, fromTile);
+    fromTile.style['animation-name'] = 'image-transition-' + options.transition + '-out';
+    fromTile.style['animation-duration'] = options.duration + 'ms';
+    fromTile.style['animation-delay'] = options.delay(x, y) + 'ms';
+    fromTile.style['animation-fill-mode'] = 'both';
 
-    setTimeout(function () {
-      fromTile.style.animation = 'image-transition-' + options.transition + '-out ' + options.duration + 'ms';
-      toTile.style.animation = 'image-transition-' + options.transition + '-in ' + options.duration + 'ms';
-      util.prepend(element, toTile);
-    }, options.delay(x, y));
+    toTile.style['animation-name'] = 'image-transition-' + options.transition + '-in';
+    toTile.style['animation-duration'] = options.duration + 'ms';
+    toTile.style['animation-delay'] = options.delay(x, y) + 'ms';
+    toTile.style['animation-fill-mode'] = 'both';
+
+    util.prepend(element, fromTile);
+    util.prepend(element, toTile);
 
     toTile.addEventListener('animationend', function () {
       element.removeChild(fromTile);
